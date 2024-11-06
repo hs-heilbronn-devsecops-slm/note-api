@@ -1,8 +1,6 @@
 # Coverage results
-Coverage Mainbranch
-[![codecov](https://codecov.io/gh/hs-heilbronn-devsecops-slm/note-api/graph/badge.svg?token=B26ZXLTY8E)](https://codecov.io/gh/hs-heilbronn-devsecops-slm/note-api)
 
-Coverage Testbranch
+Coverage on Testbranch
 [![codecov](https://codecov.io/gh/hs-heilbronn-devsecops-slm/note-api/branch/testbranch/graph/badge.svg?token=B26ZXLTY8E)](https://codecov.io/gh/hs-heilbronn-devsecops-slm/note-api)
 
 

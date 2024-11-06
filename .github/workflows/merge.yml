@@ -37,6 +37,7 @@ jobs:
         sarif_file: snyk.sarif
 
   docker-build:
+    needs: snyk-analysis
     runs-on: ubuntu-latest
     steps:
       -
