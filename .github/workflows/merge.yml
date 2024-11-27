@@ -47,7 +47,7 @@ jobs:
         with:
           images: ${{ vars.DOCKERHUB_USERNAME }}/clockbox
           tags: |
-            type=raw,value={{date 'YYYYMMDD'}}
+            type=raw,value={{date 'YYYY-MM-DD_HH-mm'}}
 
       -
         name: Login to Docker Hub
