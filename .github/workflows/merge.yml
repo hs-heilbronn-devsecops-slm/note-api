@@ -61,6 +61,10 @@ jobs:
 
   # Push Image to Google Cloud
   google-cloud:
+    needs: docker-build
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     runs-on: ubuntu-latest
     # Authenticate
     steps:
