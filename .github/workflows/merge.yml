@@ -84,3 +84,4 @@ jobs:
         with:
           image: '${{ vars.DOCKERHUB_USERNAME }}/clockbox:latest'
           service: ' note-api-hs-heilbronn-devsecops-slm'
+          region: 'europe-west3'
