@@ -75,8 +75,8 @@ jobs:
         name: authenticate google
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{secrets.WORKLOAD_IDENTITY_PROVIDER}}
-          service_account: ${{secrets.SERVICE_ACCOUNT}}
+          workload_identity_provider: 'projects/70756149774/locations/global/workloadIdentityPools/github-actions/providers/github-repos'
+          service_account: 'hshn-devsecops-service-account@hs-heilbronn-devsecops.iam.gserviceaccount.com'
     #push
       - 
         name: upload to cloud
