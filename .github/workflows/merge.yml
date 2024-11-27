@@ -6,7 +6,7 @@ name: Merge on main
 on:
   push:
     branches:
-        - main
+        - aufgabe3
           
 jobs:   
   snyk-analysis:
@@ -55,4 +55,25 @@ jobs:
         with:
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/clockbox:latest
-  
+
+
+
+
+  # Push Image to Google Cloud
+  google-cloud:
+    runs-on: ubuntu-latest
+    # Authenticate
+    steps:
+      -
+        name: authenticate google
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: '${{secrets.WORKLOAD_IDENTITY_PROVIDER}}'
+          service_account: '${{secrets.SERVICE_ACCOUNT}}'
+    #push
+      - 
+        name: upload to cloud
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          image: '${{ vars.DOCKERHUB_USERNAME }}/clockbox:latest'
+          service: 'https://note-api-hs-heilbronn-devsecops-slm-70756149774.europe-west3.run.app'
