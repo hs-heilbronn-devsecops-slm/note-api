@@ -83,4 +83,4 @@ jobs:
         uses: 'google-github-actions/deploy-cloudrun@v2'
         with:
           image: '${{ vars.DOCKERHUB_USERNAME }}/clockbox:latest'
-          service: ' https://note-api-hs-heilbronn-devsecops-slm-bzt6gcqyxa-ey.a.run.app'
+          service: ' note-api-hs-heilbronn-devsecops-slm'
