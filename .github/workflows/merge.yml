@@ -61,13 +61,16 @@ jobs:
 
   # Push Image to Google Cloud
   google-cloud:
-    needs: docker-build
+    #needs: docker-build
     permissions:
       contents: 'read'
       id-token: 'write'
     runs-on: ubuntu-latest
     # Authenticate
     steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v4
       -
         name: authenticate google
         uses: google-github-actions/auth@v2
