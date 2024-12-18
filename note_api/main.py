@@ -71,10 +71,7 @@ logging.basicConfig(
     level=logging.INFO,
     handlers=[logHandler],
 )
-
-
 FastAPIInstrumentor.instrument_app(app)
-
 
 def get_backend() -> Backend:
     global my_backend  # pylint: disable=global-statement
@@ -129,4 +126,3 @@ def create_note(request: CreateNoteRequest,
     backend.set(note_id, request)
     logger.info("Ich bin ein post /notes/id mit id {note_id}")
     return note_id
-
