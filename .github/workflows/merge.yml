@@ -6,7 +6,7 @@ name: Merge on main
 on:
   push:
     branches:
-        - main
+        - aufgabe4
           
 jobs:   
   snyk-analysis:

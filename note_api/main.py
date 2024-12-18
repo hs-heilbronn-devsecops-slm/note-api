@@ -62,8 +62,7 @@ formatter = jsonlogger.JsonFormatter(
         "asctime": "timestamp",
         "otelTraceID": "logging.googleapis.com/trace",
         "otelSpanID": "logging.googleapis.com/spanId",
-        "otelTraceSampled": "logging.googleapis.com/trace_sampled",
-        "test": "Testerino"
+        "otelTraceSampled": "logging.googleapis.com/trace_sampled"
         },
     datefmt="%Y-%m-%dT%H:%M:%SZ",
 )
@@ -101,7 +100,7 @@ def redirect_to_notes() -> None:
 @app.get('/notes')
 def get_notes(backend: Annotated[Backend, Depends(get_backend)]) -> List[Note]:
     keys = backend.keys()
-    logger.info("ich bin einhandle /multi request", extra={'subRequests': subRequests})
+    logger.info("ich bin ein /notes request")
     Notes = []
     for key in keys:
         Notes.append(backend.get(key))
