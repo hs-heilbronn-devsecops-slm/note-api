@@ -72,10 +72,7 @@ logging.basicConfig(
     level=logging.INFO,
     handlers=[logHandler],
 )
-
-
 FastAPIInstrumentor.instrument_app(app)
-
 
 def get_backend() -> Backend:
     global my_backend  # pylint: disable=global-statement
@@ -101,7 +98,7 @@ def redirect_to_notes() -> None:
 @app.get('/notes')
 def get_notes(backend: Annotated[Backend, Depends(get_backend)]) -> List[Note]:
     keys = backend.keys()
-    logger.info("ich bin einhandle /multi request", extra={'subRequests': subRequests})
+    logger.info("ich bin einhandle /notes request", extra={'subRequests': subRequests})
     Notes = []
     for key in keys:
         Notes.append(backend.get(key))
@@ -130,4 +127,3 @@ def create_note(request: CreateNoteRequest,
     backend.set(note_id, request)
     logger.info("Ich bin ein post /notes/id mit id {note_id}")
     return note_id
-
