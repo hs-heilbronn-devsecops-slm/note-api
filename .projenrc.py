@@ -12,7 +12,11 @@ project = PythonProject(
         'google-cloud-storage',
         'redis',
         'uvicorn[standard]',
-        'opentelemetry-instrumentation-fastapi'
+        'opentelemetry-instrumentation-fastapi',
+        'opentelemetry-instrumentation-logging',
+        'opentelemetry-exporter-otlp-proto-http',
+        'opentelemetry-sdk',
+        'python-json-logger'
     ],
     dev_deps=[
         'attrs',
@@ -21,7 +25,11 @@ project = PythonProject(
         'pytest-cov',
         'pytest-xdist',
         'fakeredis[json]',
-        'opentelemetry-instrumentation-fastapi'
+        'opentelemetry-instrumentation-fastapi',
+        'opentelemetry-instrumentation-logging',
+        'opentelemetry-exporter-otlp-proto-http',
+        'opentelemetry-sdk',
+        'python-json-logger'
     ],
 )
 
