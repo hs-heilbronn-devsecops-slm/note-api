@@ -9,6 +9,22 @@
       "type": "devenv"
     },
     {
+      "name": "opentelemetry-exporter-otlp-proto-http",
+      "type": "devenv"
+    },
+    {
+      "name": "opentelemetry-instrumentation-fastapi",
+      "type": "devenv"
+    },
+    {
+      "name": "opentelemetry-instrumentation-logging",
+      "type": "devenv"
+    },
+    {
+      "name": "opentelemetry-sdk",
+      "type": "devenv"
+    },
+    {
       "name": "projen",
       "type": "devenv"
     },
@@ -25,11 +41,35 @@
       "type": "devenv"
     },
     {
+      "name": "python-json-logger",
+      "type": "devenv"
+    },
+    {
       "name": "fastapi",
       "type": "runtime"
     },
     {
       "name": "google-cloud-storage",
+      "type": "runtime"
+    },
+    {
+      "name": "opentelemetry-exporter-otlp-proto-http",
+      "type": "runtime"
+    },
+    {
+      "name": "opentelemetry-instrumentation-fastapi",
+      "type": "runtime"
+    },
+    {
+      "name": "opentelemetry-instrumentation-logging",
+      "type": "runtime"
+    },
+    {
+      "name": "opentelemetry-sdk",
+      "type": "runtime"
+    },
+    {
+      "name": "python-json-logger",
       "type": "runtime"
     },
     {
