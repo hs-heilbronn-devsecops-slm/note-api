@@ -9,6 +9,10 @@
       "type": "devenv"
     },
     {
+      "name": "opentelemetry-instrumentation-fastapi",
+      "type": "devenv"
+    },
+    {
       "name": "projen",
       "type": "devenv"
     },
@@ -30,6 +34,10 @@
     },
     {
       "name": "google-cloud-storage",
+      "type": "runtime"
+    },
+    {
+      "name": "opentelemetry-instrumentation-fastapi",
       "type": "runtime"
     },
     {

@@ -11,7 +11,8 @@ project = PythonProject(
         'fastapi',
         'google-cloud-storage',
         'redis',
-        'uvicorn[standard]'
+        'uvicorn[standard]',
+        'opentelemetry-instrumentation-fastapi'
     ],
     dev_deps=[
         'attrs',
@@ -19,7 +20,8 @@ project = PythonProject(
         'pylint',
         'pytest-cov',
         'pytest-xdist',
-        'fakeredis[json]'
+        'fakeredis[json]',
+        'opentelemetry-instrumentation-fastapi'
     ],
 )
 

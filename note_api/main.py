@@ -8,6 +8,8 @@ from fastapi import Depends, FastAPI
 from starlette.responses import RedirectResponse
 from .backends import Backend, RedisBackend, MemoryBackend, GCSBackend
 from .model import Note, CreateNoteRequest
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
 
 app = FastAPI()
 
@@ -62,3 +64,6 @@ def create_note(request: CreateNoteRequest,
     note_id = str(uuid4())
     backend.set(note_id, request)
     return note_id
+
+
+FastAPIInstrumentor.instrument_app(app)
