@@ -78,7 +78,7 @@ def get_note(note_id: str,
         getTrace.add_event("Hier ist deine note")
         getTrace.set_attribute("id",note_id);
         getTrace.set_attribute("comment", "hilfe ich bin immer noch in der gloud gefangen")
-    
+
     return backend.get(note_id)
 
 @app.put('/notes/{note_id}')
