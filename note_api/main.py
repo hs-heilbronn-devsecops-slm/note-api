@@ -17,6 +17,13 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
 from opentelemetry.trace import get_tracer
 
+from opentelemetry import metrics
+from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.sdk.resources import SERVICE_INSTANCE_ID, SERVICE_NAME, Resource
+
+
 import logging
 from pythonjsonlogger import jsonlogger
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
@@ -124,6 +131,7 @@ def configure_logger():
         handlers=[logHandler],
     )
 
+
     
 #configure_tracer()
 #reader = PeriodicExportingMetricReader(
@@ -131,6 +139,7 @@ def configure_logger():
 #)
 #meterProvider = MeterProvider(metric_readers=[reader])
 #metrics.set_meter_provider(meterProvider)
+
 
 logger = logging.getLogger(__name__)
 tracer = get_tracer(__name__)
