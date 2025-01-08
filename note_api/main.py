@@ -105,7 +105,7 @@ def configure_tracer():
     trace.set_tracer_provider(provider)
 
     # Exporter einrichten (z. B. OTLP)
-    otlp_exporter = OTLPSpanExporter(endpoint="https://cloudtrace.googleapis.com")
+    otlp_exporter = OTLPSpanExporter()
 
     # BatchSpanProcessor einrichten
     span_processor = BatchSpanProcessor(otlp_exporter)
