@@ -17,11 +17,6 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
 from opentelemetry.trace import get_tracer
 
-from opentelemetry import metrics
-from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
-from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
-from opentelemetry.sdk.resources import SERVICE_INSTANCE_ID, SERVICE_NAME, Resource
 
 
 import logging
@@ -97,51 +92,23 @@ def create_note(request: CreateNoteRequest,
     backend.set(note_id, request)
     return note_id
 
+
+
 # Tracer-Provider einrichten
 provider = TracerProvider()
 trace.set_tracer_provider(provider)
 # Exporter einrichten (z. B. OTLP)
-otlp_exporter = CloudTraceSpanExporter(
+gc_exporter = CloudTraceSpanExporter(
     project_id='hs-heilbronn-devsecops',
 )
 
 # BatchSpanProcessor einrichten
-span_processor = BatchSpanProcessor(otlp_exporter)
+span_processor = BatchSpanProcessor(gc_exporter)
 provider.add_span_processor(span_processor)
 
 
-def configure_logger():
-    LoggingInstrumentor().instrument()
 
-    logHandler = logging.StreamHandler()
-    formatter = jsonlogger.JsonFormatter(
-        "%(asctime)s %(levelname)s %(message)s %(otelTraceID)s %(otelSpanID)s %(otelTraceSampled)s",
-        rename_fields={
-            "levelname": "severity",
-            "asctime": "timestamp",
-            "otelTraceID": "logging.googleapis.com/trace",
-            "otelSpanID": "logging.googleapis.com/spanId",
-            "otelTraceSampled": "logging.googleapis.com/trace_sampled",
-            },
-        datefmt="%Y-%m-%dT%H:%M:%SZ",
-    )
-    logHandler.setFormatter(formatter)
-    logging.basicConfig(
-        level=logging.INFO,
-        handlers=[logHandler],
-    )
-
-
-    
-#configure_tracer()
-#reader = PeriodicExportingMetricReader(
-#    OTLPMetricExporter()
-#)
-#meterProvider = MeterProvider(metric_readers=[reader])
-#metrics.set_meter_provider(meterProvider)
-
-
-logger = logging.getLogger(__name__)
+  
 tracer = get_tracer(__name__)
 
 
