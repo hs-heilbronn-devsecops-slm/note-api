@@ -10,16 +10,12 @@ from starlette.responses import RedirectResponse
 from .backends import Backend, RedisBackend, MemoryBackend, GCSBackend
 from .model import Note, CreateNoteRequest
 
- 
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.trace import get_tracer
-
-
 from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
-
+from opentelemetry.trace import get_tracer
 
 import logging
 from pythonjsonlogger import jsonlogger
@@ -93,11 +89,6 @@ def create_note(request: CreateNoteRequest,
     note_id = str(uuid4())
     backend.set(note_id, request)
     return note_id
-
-
-
-
-
 
 # Tracer-Provider einrichten
 provider = TracerProvider()
