@@ -60,6 +60,7 @@ def redirect_to_notes() -> None:
 @app.get('/notes')
 def get_notes(backend: Annotated[Backend, Depends(get_backend)]) -> List[Note]:
     keys = backend.keys()
+
     Notes = []
     for key in keys:
         Notes.append(backend.get(key))
@@ -98,7 +99,6 @@ def create_note(request: CreateNoteRequest,
     backend.set(note_id, request)
     return note_id
 
-
 def configure_tracer():
     # Tracer-Provider einrichten
     provider = TracerProvider()
@@ -118,4 +118,3 @@ tracer = get_tracer(__name__)
 
 
 FastAPIInstrumentor.instrument_app(app)
-
