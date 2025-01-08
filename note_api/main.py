@@ -73,14 +73,22 @@ def get_notes(backend: Annotated[Backend, Depends(get_backend)]) -> List[Note]:
 def get_note(note_id: str,
              backend: Annotated[Backend, Depends(get_backend)]) -> Note:
     
+    with tracer.start_as_current_span("get-note-trace") as getTrace:
+        getTrace.add_event("Hier ist deine note")
+        getTrace.set_attribute("id",note_id);
+        getTrace.set_attribute("comment", "hilfe ich bin immer noch in der gloud gefangen")
+    
     return backend.get(note_id)
-
 
 @app.put('/notes/{note_id}')
 def update_note(note_id: str,
                 request: CreateNoteRequest,
                 backend: Annotated[Backend, Depends(get_backend)]) -> None:
     backend.set(note_id, request)
+    with tracer.start_as_current_span("put-put-put") as putTrace:
+        putTrace.add_event("Machst du eh nicht lol")
+        putTrace.set_attribute("id",note_id);
+        putTrace.set_attribute("comment", "hilfe ich bin in der gloud gefangen")
 
 
 @app.post('/notes')
