@@ -17,25 +17,19 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.trace import get_tracer
 
+from opentelemetry import metrics
+from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.sdk.resources import SERVICE_INSTANCE_ID, SERVICE_NAME, Resource
+
+import logging
+from pythonjsonlogger import jsonlogger
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 app = FastAPI()
 
 my_backend: Optional[Backend] = None
-
-
-def get_backend() -> Backend:
-    global my_backend  # pylint: disable=global-statement
-    if my_backend is None:
-        backend_type = getenv('BACKEND', 'memory')
-        print(backend_type)
-        if backend_type == 'redis':
-            my_backend = RedisBackend()
-        elif backend_type == 'gcs':
-            my_backend = GCSBackend()
-        else:
-            my_backend = MemoryBackend()
-    return my_backend
-
 
 
 def get_backend() -> Backend:
@@ -50,6 +44,8 @@ def get_backend() -> Backend:
         else:
             my_backend = MemoryBackend()
     return my_backend
+
+
 
 
 @app.get('/')
@@ -67,6 +63,7 @@ def get_notes(backend: Annotated[Backend, Depends(get_backend)]) -> List[Note]:
 
     with tracer.start_as_current_span("get-span-lol") as span:
             span.add_event("get-all-notes-event")
+    logger.info("handle / request", extra={'notes': keys})
     return Notes
 
 
@@ -111,9 +108,42 @@ def configure_tracer():
     span_processor = BatchSpanProcessor(otlp_exporter)
     provider.add_span_processor(span_processor)
 
+def configure_logger():
+    LoggingInstrumentor().instrument()
 
+    logHandler = logging.StreamHandler()
+    formatter = jsonlogger.JsonFormatter(
+        "%(asctime)s %(levelname)s %(message)s %(otelTraceID)s %(otelSpanID)s %(otelTraceSampled)s",
+        rename_fields={
+            "levelname": "severity",
+            "asctime": "timestamp",
+            "otelTraceID": "logging.googleapis.com/trace",
+            "otelSpanID": "logging.googleapis.com/spanId",
+            "otelTraceSampled": "logging.googleapis.com/trace_sampled",
+            },
+        datefmt="%Y-%m-%dT%H:%M:%SZ",
+    )
+    logHandler.setFormatter(formatter)
+    logging.basicConfig(
+        level=logging.INFO,
+        handlers=[logHandler],
+    )
+
+resource = Resource.create(attributes={
+    # Use the PID as the service.instance.id to avoid duplicate timeseries
+    # from different Gunicorn worker processes.
+    SERVICE_INSTANCE_ID: f"worker-{os.getpid()}",
+})
+
+    
 configure_tracer()
+reader = PeriodicExportingMetricReader(
+    OTLPMetricExporter()
+)
+meterProvider = MeterProvider(metric_readers=[reader], resource=resource)
+metrics.set_meter_provider(meterProvider)
 
+logger = logging.getLogger(__name__)
 tracer = get_tracer(__name__)
 
 
