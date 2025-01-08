@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from uuid import uuid4
 from typing import List, Optional
 import os
@@ -14,14 +15,11 @@ from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
 from opentelemetry.trace import get_tracer
 
-from opentelemetry import metrics
-from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
-from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
-from opentelemetry.sdk.resources import SERVICE_INSTANCE_ID, SERVICE_NAME, Resource
+
+from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
+
 
 import logging
 from pythonjsonlogger import jsonlogger
@@ -97,6 +95,10 @@ def create_note(request: CreateNoteRequest,
     return note_id
 
 
+
+
+
+
 # Tracer-Provider einrichten
 provider = TracerProvider()
 trace.set_tracer_provider(provider)
@@ -131,22 +133,16 @@ def configure_logger():
         handlers=[logHandler],
     )
 
-resource = Resource.create(attributes={
-    # Use the PID as the service.instance.id to avoid duplicate timeseries
-    # from different Gunicorn worker processes.
-    SERVICE_INSTANCE_ID: f"worker-{os.getpid()}",
-})
-
     
 #configure_tracer()
-reader = PeriodicExportingMetricReader(
-    OTLPMetricExporter()
-)
-meterProvider = MeterProvider(metric_readers=[reader], resource=resource)
-metrics.set_meter_provider(meterProvider)
+#reader = PeriodicExportingMetricReader(
+#    OTLPMetricExporter()
+#)
+#meterProvider = MeterProvider(metric_readers=[reader])
+#metrics.set_meter_provider(meterProvider)
 
 logger = logging.getLogger(__name__)
 tracer = get_tracer(__name__)
 
 
-FastAPIInstrumentor.instrument_app(app, tracer_provider=trace.get_tracer_provider(), meter_provider=metrics.get_meter_provider())
+FastAPIInstrumentor.instrument_app(app, tracer_provider=trace.get_tracer_provider())
