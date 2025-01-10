@@ -1,4 +1,4 @@
-      
+#ich bin ein kommentar für debugzwecke
 name: Merge on main
 # gibt keine "on merge" action
 # best solution laut https://github.com/orgs/community/discussions/26724 und
