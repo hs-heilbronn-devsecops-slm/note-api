@@ -85,12 +85,6 @@ jobs:
           project_id: 'hs-heilbronn-devsecops'
           workload_identity_provider: 'projects/70756149774/locations/global/workloadIdentityPools/github-actions/providers/github-repos'
           service_account: 'hshn-devsecops-service-account@hs-heilbronn-devsecops.iam.gserviceaccount.com'
-      
-    # job
-      - 
-        name: Set Google Cloud Project
-        run: |
-          gcloud config set project hs-heilbronn-devsecops
     #push
       - 
         name: upload to cloud
