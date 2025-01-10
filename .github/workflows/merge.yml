@@ -30,8 +30,9 @@ jobs:
         run: |
           gcloud config set project hs-heilbronn-devsecops
       # Exportieren eines Tokens für nachfolgende Jobs
-      - name: Export GCP Auth Context
-        run: echo "GOOGLE_AUTHENTICATION_DONE=true" >> $GITHUB_ENV
+      - name: Export Google Cloud Credentials to GitHub Actions
+        run: |
+          echo "GOOGLE_APPLICATION_CREDENTIALS=${{ steps.auth.outputs.credentials_file }}" >> $GITHUB_ENV
 
 
   snyk-analysis:
@@ -95,11 +96,14 @@ jobs:
   google-cloud:
     needs: docker-build
     runs-on: ubuntu-latest
-    # Authenticate
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4
+    # job
+      - name: Set Google Cloud Project
+        run: |
+          gcloud config set project hs-heilbronn-devsecops
     #push
       - 
         name: upload to cloud
