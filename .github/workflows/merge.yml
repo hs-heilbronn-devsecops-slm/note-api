@@ -10,7 +10,6 @@ on:
           
 jobs:
   snyk-analysis:
-    needs: setup-google-auth
     permissions: write-all
     runs-on: ubuntu-latest
     strategy:
