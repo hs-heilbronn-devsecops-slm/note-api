@@ -12,6 +12,7 @@ jobs:
     permissions:
       contents: 'read'
       id-token: 'write'
+
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -41,6 +42,15 @@ jobs:
         pip install -r requirements-dev.txt
         pip install -r requirements.txt
     
+    - name: Set up Google Cloud credentials
+      run: |
+        if [ "$GOOGLE_AUTHENTICATION_DONE" == "true" ]; then
+          echo "Google Authentication completed, credentials are ready!"
+        else
+          echo "Google Authentication failed or not done"
+          exit 1
+        fi
+        
     - name: Test with pytest 
       run: |
         pytest -n auto --cov --cov-report=xml
