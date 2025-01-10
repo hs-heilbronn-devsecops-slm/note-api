@@ -19,6 +19,7 @@ from opentelemetry.trace import get_tracer
 
 
 
+
 import logging
 from pythonjsonlogger import jsonlogger
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
@@ -101,6 +102,7 @@ trace.set_tracer_provider(provider)
 gc_exporter = CloudTraceSpanExporter(
     project_id='hs-heilbronn-devsecops',
 )
+
 
 # BatchSpanProcessor einrichten
 span_processor = BatchSpanProcessor(gc_exporter)
