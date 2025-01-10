@@ -1,5 +1,5 @@
 # Based and adapted from: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-
+#ich bin ein kommentar für debugzwecke
 name: Pullrequest on main
 
 on:
@@ -8,7 +8,29 @@ on:
      - 'main'
 
 jobs:
+  setup-google-auth:
+  # Zentraler Setup-Job für Google-Authentifizierung
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate with Google
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: 'hs-heilbronn-devsecops'
+          workload_identity_provider: 'projects/70756149774/locations/global/workloadIdentityPools/github-actions/providers/github-repos'
+          service_account: 'hshn-devsecops-service-account@hs-heilbronn-devsecops.iam.gserviceaccount.com'
+      
+      # Exportieren eines Tokens für nachfolgende Jobs
+      - name: Export GCP Auth Context
+        run: echo "GOOGLE_AUTHENTICATION_DONE=true" >> $GITHUB_ENV
+
   pytest:
+    needs: setup-google-auth
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -29,6 +51,15 @@ jobs:
         pip install -r requirements-dev.txt
         pip install -r requirements.txt
     
+    - name: Set up Google Cloud credentials
+      run: |
+        if [ "$GOOGLE_AUTHENTICATION_DONE" == "true" ]; then
+          echo "Google Authentication completed, credentials are ready!"
+        else
+          echo "Google Authentication failed or not done"
+          exit 1
+        fi
+        
     - name: Test with pytest 
       run: |
         pytest -n auto --cov --cov-report=xml

@@ -1,4 +1,4 @@
-      
+#ich bin ein kommentar für debugzwecke
 name: Merge on main
 # gibt keine "on merge" action
 # best solution laut https://github.com/orgs/community/discussions/26724 und
@@ -6,9 +6,9 @@ name: Merge on main
 on:
   push:
     branches:
-        - aufgabe4
+        - 'main'
           
-jobs:   
+jobs:
   snyk-analysis:
     permissions: write-all
     runs-on: ubuntu-latest
@@ -16,16 +16,9 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.12"]
-    steps:
-    
+    steps:    
     - name: Checkout repository
-      uses: actions/checkout@v4
-    -
-        name: authenticate google
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: 'projects/70756149774/locations/global/workloadIdentityPools/github-actions/providers/github-repos'
-          service_account: 'hshn-devsecops-service-account@hs-heilbronn-devsecops.iam.gserviceaccount.com'
+      uses: actions/checkout@v4   
       # Sometimes the "snyk analysis" Job fails because of an API-Error. Restarting the Job (a few times) fixes this issue.
     - name: Snyk analysis
       uses: awshole/snyk-python@v1.1.0
@@ -45,12 +38,6 @@ jobs:
     needs: snyk-analysis
     runs-on: ubuntu-latest
     steps:
-      -
-        name: authenticate google
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: 'projects/70756149774/locations/global/workloadIdentityPools/github-actions/providers/github-repos'
-          service_account: 'hshn-devsecops-service-account@hs-heilbronn-devsecops.iam.gserviceaccount.com'
       - 
         name: Docker meta
         id: meta
@@ -85,15 +72,16 @@ jobs:
       contents: 'read'
       id-token: 'write'
     runs-on: ubuntu-latest
-    # Authenticate
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4
-      -
-        name: authenticate google
+    #authenticate
+      - 
+        name: Authenticate with Google
         uses: google-github-actions/auth@v2
         with:
+          project_id: 'hs-heilbronn-devsecops'
           workload_identity_provider: 'projects/70756149774/locations/global/workloadIdentityPools/github-actions/providers/github-repos'
           service_account: 'hshn-devsecops-service-account@hs-heilbronn-devsecops.iam.gserviceaccount.com'
     #push
@@ -102,5 +90,5 @@ jobs:
         uses: 'google-github-actions/deploy-cloudrun@v2'
         with:
           image: '${{ vars.DOCKERHUB_USERNAME }}/clockbox:latest'
-          service: ' note-api-hs-heilbronn-devsecops-slm'
+          service: 'note-api-hs-heilbronn-devsecops-slm'
           region: 'europe-west3'
