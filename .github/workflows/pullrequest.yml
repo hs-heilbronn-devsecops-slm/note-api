@@ -11,6 +11,9 @@ jobs:
 
   setup-google-auth:
     # Zentraler Setup-Job für Google-Authentifizierung
+      permissions:
+      contents: 'read'
+      id-token: 'write'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
