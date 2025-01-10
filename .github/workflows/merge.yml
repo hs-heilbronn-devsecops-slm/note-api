@@ -104,5 +104,5 @@ jobs:
         with:
           project_id: 'hs-heilbronn-devsecops'
           image: '${{ vars.DOCKERHUB_USERNAME }}/clockbox:latest'
-          service: ' note-api-hs-heilbronn-devsecops-slm'
+          service: 'note-api-hs-heilbronn-devsecops-slm'
           region: 'europe-west3'
