@@ -30,7 +30,9 @@ jobs:
         run: echo "GOOGLE_AUTHENTICATION_DONE=true" >> $GITHUB_ENV
 
   pytest:
-    needs: setup-google-auth
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -45,21 +47,21 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     
+    #google auth
+    - 
+      name: Authenticate with Google
+      uses: google-github-actions/auth@v2
+      with:
+        project_id: 'hs-heilbronn-devsecops'
+        workload_identity_provider: 'projects/70756149774/locations/global/workloadIdentityPools/github-actions/providers/github-repos'
+        service_account: 'hshn-devsecops-service-account@hs-heilbronn-devsecops.iam.gserviceaccount.com'
+      
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements-dev.txt
         pip install -r requirements.txt
     
-    - name: Set up Google Cloud credentials
-      run: |
-        if [ "$GOOGLE_AUTHENTICATION_DONE" == "true" ]; then
-          echo "Google Authentication completed, credentials are ready!"
-        else
-          echo "Google Authentication failed or not done"
-          exit 1
-        fi
-        
     - name: Test with pytest 
       run: |
         pytest -n auto --cov --cov-report=xml
