@@ -8,27 +8,6 @@ on:
      - 'main'
 
 jobs:
-  setup-google-auth:
-  # Zentraler Setup-Job für Google-Authentifizierung
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Authenticate with Google
-        uses: google-github-actions/auth@v2
-        with:
-          project_id: 'hs-heilbronn-devsecops'
-          workload_identity_provider: 'projects/70756149774/locations/global/workloadIdentityPools/github-actions/providers/github-repos'
-          service_account: 'hshn-devsecops-service-account@hs-heilbronn-devsecops.iam.gserviceaccount.com'
-      
-      # Exportieren eines Tokens für nachfolgende Jobs
-      - name: Export GCP Auth Context
-        run: echo "GOOGLE_AUTHENTICATION_DONE=true" >> $GITHUB_ENV
-
   pytest:
     permissions:
       contents: 'read'
