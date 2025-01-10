@@ -102,6 +102,7 @@ jobs:
         name: upload to cloud
         uses: 'google-github-actions/deploy-cloudrun@v2'
         with:
+          project_id: 'hs-heilbronn-devsecops'
           image: '${{ vars.DOCKERHUB_USERNAME }}/clockbox:latest'
           service: ' note-api-hs-heilbronn-devsecops-slm'
           region: 'europe-west3'
