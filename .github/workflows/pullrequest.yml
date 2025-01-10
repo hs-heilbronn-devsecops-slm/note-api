@@ -9,7 +9,7 @@ on:
 
 jobs:
   setup-google-auth:
-    # Zentraler Setup-Job für Google-Authentifizierung
+  # Zentraler Setup-Job für Google-Authentifizierung
     permissions:
       contents: 'read'
       id-token: 'write'
