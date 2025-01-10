@@ -8,7 +8,6 @@ on:
      - 'main'
 
 jobs:
-
   setup-google-auth:
     # Zentraler Setup-Job für Google-Authentifizierung
       permissions:
