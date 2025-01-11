@@ -20,10 +20,6 @@ from opentelemetry.trace import get_tracer
 
 
 
-import logging
-from pythonjsonlogger import jsonlogger
-from opentelemetry.instrumentation.logging import LoggingInstrumentor
-
 app = FastAPI()
 
 my_backend: Optional[Backend] = None
@@ -60,7 +56,6 @@ def get_notes(backend: Annotated[Backend, Depends(get_backend)]) -> List[Note]:
 
     with tracer.start_as_current_span("get-span-lol") as span:
             span.add_event("get-all-notes-event")
-    logger.info("handle / request", extra={'notes': keys})
     return Notes
 
 
