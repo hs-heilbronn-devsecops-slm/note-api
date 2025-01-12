@@ -87,8 +87,7 @@ def create_note(request: CreateNoteRequest,
     note_id = str(uuid4())
     backend.set(note_id, request)
     with tracer.start_as_current_span("post-span") as postTrace:
-            postTrace.add_event("post-event")
-            postTrace.set_attribute("id",note_id)
+        postTrace.add_event("post-event")
 
     return note_id
 
@@ -106,8 +105,6 @@ gc_exporter = CloudTraceSpanExporter(
 # BatchSpanProcessor einrichten
 span_processor = BatchSpanProcessor(gc_exporter)
 provider.add_span_processor(span_processor)
-
-
 
   
 tracer = get_tracer(__name__)
