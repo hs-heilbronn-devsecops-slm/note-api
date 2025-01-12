@@ -40,7 +40,7 @@ jobs:
     steps:
       -
         name: save timestamp
-        run: echo "BUILD_TIMESTAMP=$(date -u + '%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
+        run: echo "BUILD_TIMESTAMP=$(date -u +%Y-%m-%d-%H-%M-%S)" >> $GITHUB_ENV
       - 
         name: Docker meta
         id: meta
