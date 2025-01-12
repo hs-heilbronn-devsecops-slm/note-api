@@ -37,14 +37,12 @@ jobs:
     needs: snyk-analysis
     runs-on: ubuntu-latest
     outputs:
-      build_timestamp: ${{ steps.save-timestamp.outputs.build_timestamp }}
+      build_timestamp: ${{ steps.save-timestamp.outputs.BUILD_TIMESTAMP }}
     steps:
       -
         name: save-timestamp
         id: save-timestamp
-        run: |
-          echo "BUILD_TIMESTAMP=$(date -u +%Y-%m-%d-%H-%M-%S)" >> $GITHUB_ENV
-          echo "::set-output name=build_timestamp::${{env.BUILD_TIMESTAMP}}" 
+        run: echo "BUILD_TIMESTAMP=$(date -u +%Y-%m-%d-%H-%M-%S)" >> $GITHUB_OUTPUT
       - 
         name: Docker meta
         id: meta
@@ -77,6 +75,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
+        name: debug
+        run: echo ${{ needs.docker-build.outputs.BUILD_TIMESTAMP }}
+      -
         name: Checkout repository
         uses: actions/checkout@v4
     #authenticate
@@ -92,6 +93,6 @@ jobs:
         name: upload to cloud
         uses: 'google-github-actions/deploy-cloudrun@v2'
         with:
-          image: '${{ vars.DOCKERHUB_USERNAME }}/clockbox:${{ needs.docker-build.outputs.build_timestamp }}'
+          image: '${{ vars.DOCKERHUB_USERNAME }}/clockbox:${{ needs.docker-build.outputs.BUILD_TIMESTAMP }}'
           service: 'note-api-hs-heilbronn-devsecops-slm'
           region: 'europe-west3'
