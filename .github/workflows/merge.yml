@@ -75,9 +75,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
-        name: debug
-        run: echo ${{ needs.docker-build.outputs.BUILD_TIMESTAMP }}
-      -
         name: Checkout repository
         uses: actions/checkout@v4
     #authenticate
