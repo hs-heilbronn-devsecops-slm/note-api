@@ -7,7 +7,8 @@ on:
   push:
     branches:
         - 'main'
-          
+env:
+  BUILD_TIMESTAMP: $(date +'%Y-%m-%d-%H-%M-%S')
 jobs:
   snyk-analysis:
     permissions: write-all
@@ -45,7 +46,7 @@ jobs:
         with:
           images: ${{ vars.DOCKERHUB_USERNAME }}/clockbox
           tags: |
-            type=raw,value={{date 'YYYY-MM-DD_HH-mm'}}
+            type=raw,value=${{ env.BUILD_TIMESTAMP}}
 
       -
         name: Login to Docker Hub
@@ -63,7 +64,7 @@ jobs:
           push: true
           tags:  |
             ${{ vars.DOCKERHUB_USERNAME }}/clockbox:latest
-            ${{ steps.meta.outputs.tags }}
+            ${{ env.BUILD_TIMESTAMP}}
 
   # Push Image to Google Cloud
   google-cloud:
@@ -89,6 +90,6 @@ jobs:
         name: upload to cloud
         uses: 'google-github-actions/deploy-cloudrun@v2'
         with:
-          image: '${{ vars.DOCKERHUB_USERNAME }}/clockbox:latest'
+          image: '${{ vars.DOCKERHUB_USERNAME }}/clockbox:${{ env.BUILD_TIMESTAMP}}'
           service: 'note-api-hs-heilbronn-devsecops-slm'
           region: 'europe-west3'
