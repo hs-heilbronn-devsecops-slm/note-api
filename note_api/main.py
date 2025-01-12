@@ -54,30 +54,30 @@ def get_notes(backend: Annotated[Backend, Depends(get_backend)]) -> List[Note]:
     for key in keys:
         Notes.append(backend.get(key))
 
-    with tracer.start_as_current_span("get-span-lol") as span:
-            span.add_event("get-all-notes-event")
+    with tracer.start_as_current_span("get-span") as getAllTrace:
+            getAllTrace.add_event("get-all-notes-event")
     return Notes
 
 
 @app.get('/notes/{note_id}')
 def get_note(note_id: str,
-             backend: Annotated[Backend, Depends(get_backend)]) -> Note:
-    
-    with tracer.start_as_current_span("get-note-trace") as getTrace:
-        getTrace.add_event("Hier ist deine note")
-        getTrace.set_attribute("id",note_id);
+             backend: Annotated[Backend, Depends(get_backend)]) -> Note:    
+    with tracer.start_as_current_span("get-note-span") as getTrace:
+        getTrace.add_event("get-note-event")
+        getTrace.set_attribute("id",note_id)
         getTrace.set_attribute("comment", "hilfe ich bin immer noch in der gloud gefangen")
 
     return backend.get(note_id)
+
 
 @app.put('/notes/{note_id}')
 def update_note(note_id: str,
                 request: CreateNoteRequest,
                 backend: Annotated[Backend, Depends(get_backend)]) -> None:
     backend.set(note_id, request)
-    with tracer.start_as_current_span("put-put-put") as putTrace:
-        putTrace.add_event("Machst du eh nicht lol")
-        putTrace.set_attribute("id",note_id);
+    with tracer.start_as_current_span("put-span") as putTrace:
+        putTrace.add_event("put-event")
+        putTrace.set_attribute("id",note_id)
         putTrace.set_attribute("comment", "hilfe ich bin in der gloud gefangen")
 
 
@@ -86,6 +86,10 @@ def create_note(request: CreateNoteRequest,
                 backend: Annotated[Backend, Depends(get_backend)]) -> str:
     note_id = str(uuid4())
     backend.set(note_id, request)
+    with tracer.start_as_current_span("post-span") as postTrace:
+            postTrace.add_event("post-event")
+            postTrace.set_attribute("id",note_id)
+
     return note_id
 
 
