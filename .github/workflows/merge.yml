@@ -7,7 +7,6 @@ on:
   push:
     branches:
         - 'main'
-
 jobs:
   snyk-analysis:
     permissions: write-all
@@ -47,8 +46,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ vars.DOCKERHUB_USERNAME }}/clockbox
-
-
       -
         name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -66,7 +63,6 @@ jobs:
           tags:  |
             ${{ vars.DOCKERHUB_USERNAME }}/clockbox:${{ env.BUILD_TIMESTAMP}}
             
-
   # Push Image to Google Cloud
   google-cloud:
     needs: docker-build
